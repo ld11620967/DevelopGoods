@@ -6,28 +6,25 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/img_icon"
+        android:id="@+id/item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/txt_title"
+        android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_toRightOf="@+id/img_icon"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/img_icon"
-        android:layout_alignParentEnd="true" />
+        android:layout_toRightOf="@id/item_icon"
+        android:paddingTop="2dp"/>
 
     <TextView
-        android:id="@+id/txt_time"
+        android:id="@+id/item_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_toRightOf="@id/img_icon"
-        android:layout_alignBottom="@+id/img_icon"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/txt_title" />
+        android:layout_toRightOf="@id/item_icon"
+        android:layout_below="@+id/item_title"
+        android:paddingBottom="2dp"/>
 </RelativeLayout>

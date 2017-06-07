@@ -3,6 +3,6 @@ package com.nilin.simplenews.model
 /**
  * Created by liangd on 2017/6/5.
  */
-class NewsModel(id: Int, desc: String, images: String, publishedAt: String, url: String) {
+class NewsModel(var id: Int, var title: String,var image: String,var time: String) {
 
 }
