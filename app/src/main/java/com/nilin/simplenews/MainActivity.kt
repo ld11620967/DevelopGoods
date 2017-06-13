@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var url = "http://gank.io/api/data/Android/5/1"
+        var url = "http://gank.io/api/data/Android/10/1"
 
         var context: Context = this
         doAsync {
