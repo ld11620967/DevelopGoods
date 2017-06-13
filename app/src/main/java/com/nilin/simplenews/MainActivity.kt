@@ -3,11 +3,13 @@ package com.nilin.simplenews
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.GridLayoutManager
 import android.util.Log
 import com.google.gson.Gson
 import com.nilin.simplenews.model.ApiGank
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.net.URL
 
@@ -18,26 +20,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var url = "http://gank.io/api/data/Android/5/1?imageView2/0/w/20 "
+        var url = "http://gank.io/api/data/Android/5/1"
 
         var context: Context = this
         doAsync {
             var returnjsonstr = URL(url).readText()
-            Log.i("returnjson", returnjsonstr)
-
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            Log.i("returnjson", "desc" + returnjson.results[0].images[0])
-
+            Log.i("haha","haha"+returnjson.results)
             uiThread {
-                listview.adapter = NewsAdapter(returnjson.results, context)
+
+                recyclerview.layoutManager = GridLayoutManager(context, 1)
+                recyclerview.adapter = NewsAdapter(returnjson.results)
+//                recyclerview.adapter = NewsAdapter(returnjson.results) {
+//                    toast("${it.title} Clicked")
+//                }
             }
-
         }
-
-
-
-//        listview.setOnItemClickListener{
-//        }
     }
 }
 

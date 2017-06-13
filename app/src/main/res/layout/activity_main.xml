@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.nilin.simplenews.MainActivity">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:id="@+id/listview"
+        android:id="@+id/recyclerview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
