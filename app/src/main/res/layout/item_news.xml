@@ -5,26 +5,28 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher" />
-
     <TextView
         android:id="@+id/item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_toRightOf="@id/item_icon"
-        android:paddingTop="2dp"/>
+        android:paddingTop="2dp"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/item_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_toRightOf="@id/item_icon"
         android:layout_below="@+id/item_title"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_below="@+id/item_time"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
