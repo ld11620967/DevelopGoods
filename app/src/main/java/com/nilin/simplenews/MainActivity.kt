@@ -38,16 +38,16 @@ class MainActivity : AppCompatActivity() {
 
         mAdapter = NewsAdapter(mList)
 
-//        mAdapter.setOnItemClickListener {
-//            pos ->
-//            val url = URLEncoder.encode(mList[pos].url)
-//            GankRouter.router(context, GankClientUri.DETAIL + url)
-//        }
+        mAdapter.setOnItemClickListener {
+            pos ->
+            val url = URLEncoder.encode(mList[pos].url)
+            GankRouter.router(context, GankClientUri.DETAIL + url)
+        }
 
-//        val intent = Intent()
-//        intent.data = Uri.parse(uri)
-//        intent.action = Intent.ACTION_VIEW
-//        context.startActivity(intent)
+        val intent = Intent()
+        intent.data = Uri.parse(uri)
+        intent.action = Intent.ACTION_VIEW
+        context.startActivity(intent)
 
 
 
