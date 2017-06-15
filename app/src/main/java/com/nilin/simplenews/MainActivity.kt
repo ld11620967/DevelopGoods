@@ -1,8 +1,6 @@
 package com.nilin.simplenews
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -14,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
-import java.net.URLEncoder
+
 
 
 class MainActivity : AppCompatActivity() {
