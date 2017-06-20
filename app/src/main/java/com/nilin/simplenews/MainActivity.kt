@@ -4,12 +4,15 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.google.gson.Gson
 import com.nilin.simplenews.model.ApiGank
 import com.nilin.simplenews.model.NewsModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 import java.net.URL
 
@@ -22,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
 
         var url = "http://gank.io/api/data/Android/10/1"
 
@@ -36,18 +43,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mAdapter = NewsAdapter(mList)
-
-        mAdapter.setOnItemClickListener {
-            pos ->
-            val url = URLEncoder.encode(mList[pos].url)
-            GankRouter.router(context, GankClientUri.DETAIL + url)
+        fab.onClick {
+            toast("haha")
         }
 
-        val intent = Intent()
-        intent.data = Uri.parse(uri)
-        intent.action = Intent.ACTION_VIEW
-        context.startActivity(intent)
+
+
+
+//        mAdapter = NewsAdapter(mList)
+//
+//        mAdapter.setOnItemClickListener {
+//            pos ->
+//            val url = URLEncoder.encode(mList[pos].url)
+//            GankRouter.router(context, GankClientUri.DETAIL + url)
+//        }
+//
+//        val intent = Intent()
+//        intent.data = Uri.parse(uri)
+//        intent.action = Intent.ACTION_VIEW
+//        context.startActivity(intent)
 
 
 

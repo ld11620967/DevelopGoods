@@ -3,7 +3,6 @@ package com.nilin.simplenews
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,7 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
         holder.itemView.item_time.text = news.publishedAt.substring(0, 10)
         var model: NewsModel = items[position]
         doAsync {
-            val data = URL(model.images[0] + "?imageView2/0/w/1000").readBytes()
+            val data = URL(model.images[0] + "?imageView2/0/w/100").readBytes()
             uiThread {
                 if (data != null) {
                     val bitma = BitmapFactory.decodeByteArray(data, 0, data.size)
@@ -50,10 +49,6 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
             intent.putExtra("url",news.url)
             context.startActivity(intent)
 
-//            intent.setClass(MyApplication.context(),DetailsActivity::class.java)
-//            MyApplication.context().startActivity(intent)
-
-            Log.i("1111111", "111111" + news.url)
         }
     }
 
