@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.nilin.simplenews
 
 import android.content.Context
@@ -21,71 +19,52 @@ import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
-    //    var mList = ArrayList<NewsModel>()
-//    lateinit var mAdapter: NewsAdapter
-//    lateinit var refreshLayout: MaterialRefreshLayout
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-            val toolbar = findViewById(R.id.toolbar) as Toolbar
-            setSupportActionBar(toolbar)
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
 
+        var number = 1
+        var url = "http://gank.io/api/data/Android/10/$number"
 
-            var url = "http://gank.io/api/data/Android/10/1"
+        updata(url)
 
-            var context: Context = this
-            doAsync {
-                var returnjsonstr = URL(url).readText()
-                var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-                Log.i("haha", "haha" + returnjson.results)
-                uiThread {
-                    recyclerview.layoutManager = GridLayoutManager(context, 1)
-                    recyclerview.adapter = NewsAdapter(returnjson.results)
-                }
+        fab.onClick {
+            toast("haha")
+        }
+
+        refresh.setMaterialRefreshListener(object : MaterialRefreshListener() {
+
+            override fun onRefresh(refreshLayout: MaterialRefreshLayout) {
+                toast("shuaxin")
+                refresh.finishRefresh();
             }
 
-            fab.onClick {
-                toast("haha")
+            override fun onRefreshLoadMore(refreshLayout: MaterialRefreshLayout) {
+                //上拉刷新...
+                number=number+1
+                url = "http://gank.io/api/data/Android/10/$number"
+                toast(url)
+                updata(url)
+                refresh.finishRefreshLoadMore();
             }
+        })
+    }
 
-//            refreshLayout.setLoadMore(true)
-//            refreshLayout = findViewById(R.id.refresh) as MaterialRefreshLayout
-//            refreshLayout.setMaterialRefreshListener(object : MaterialRefreshListener() {
-
-            refresh.setMaterialRefreshListener(object : MaterialRefreshListener() {
-
-                override fun onRefresh(refreshLayout: MaterialRefreshLayout) {
-                    toast("shuaxin")
-                    refresh.finishRefresh();
-                }
-//                refresh.setLoadMore(true);
-                override fun onRefreshLoadMore(refreshLayout: MaterialRefreshLayout) {
-                    //上拉刷新...
-                    toast("jiazai")
-                    refresh.finishRefreshLoadMore();
-                }
+    fun updata(url:String) {
+        var context: Context = this
+        doAsync {
+            var returnjsonstr = URL(url).readText()
+            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+            Log.i("haha", "haha" + returnjson.results)
+            uiThread {
+                recyclerview.layoutManager = GridLayoutManager(context, 1)
+                recyclerview.adapter = NewsAdapter(returnjson.results)
             }
-            )
-
-
-
-
-
-//        mAdapter = NewsAdapter(mList)
-//
-//        mAdapter.setOnItemClickListener {
-//            pos ->
-//            val url = URLEncoder.encode(mList[pos].url)
-//            GankRouter.router(context, GankClientUri.DETAIL + url)
-//        }
-//
-//        val intent = Intent()
-//        intent.data = Uri.parse(uri)
-//        intent.action = Intent.ACTION_VIEW
-//        context.startActivity(intent)
-
+        }
     }
 }
 
