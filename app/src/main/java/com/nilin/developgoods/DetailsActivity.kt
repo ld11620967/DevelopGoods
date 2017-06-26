@@ -1,4 +1,4 @@
-package com.nilin.simplenews
+package com.nilin.developgoods
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity

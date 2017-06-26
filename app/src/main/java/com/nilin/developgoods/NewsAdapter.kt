@@ -1,4 +1,4 @@
-package com.nilin.simplenews
+package com.nilin.developgoods
 
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nilin.simplenews.model.NewsModel
+import com.nilin.developgoods.model.NewsModel
 import kotlinx.android.synthetic.main.item_news.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -19,9 +19,11 @@ import java.net.URL
  */
 class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, null, false)
-        return ViewHolder(view)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
+        var view: View
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, null, false)
+            return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,8 +47,8 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
             var position = holder.adapterPosition
             var context = holder.itemView.context
             val intent = Intent()
-            intent.setClass(context,DetailsActivity::class.java)
-            intent.putExtra("url",news.url)
+            intent.setClass(context, DetailsActivity::class.java)
+            intent.putExtra("url", news.url)
             context.startActivity(intent)
 
         }
@@ -57,6 +59,12 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     }
+
+
+    class FooterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    }
+
 
 }
 

@@ -1,4 +1,4 @@
-package com.nilin.simplenews
+package com.nilin.developgoods
 
 import org.junit.Test
 

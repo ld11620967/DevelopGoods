@@ -1,4 +1,4 @@
-package com.nilin.simplenews
+package com.nilin.developgoods
 
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
@@ -9,7 +9,7 @@ import android.util.Log
 import com.cjj.MaterialRefreshLayout
 import com.cjj.MaterialRefreshListener
 import com.google.gson.Gson
-import com.nilin.simplenews.model.ApiGank
+import com.nilin.developgoods.model.ApiGank
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -27,34 +27,35 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        var number = 1
-        var url = "http://gank.io/api/data/Android/10/$number"
+        var number = 10
+        var url = "http://gank.io/api/data/Android/$number/1"
 
         updata(url)
 
         fab.onClick {
-            toast("haha")
+            recyclerview.smoothScrollToPosition(0)
+            toast("已达顶部")
         }
 
         refresh.setMaterialRefreshListener(object : MaterialRefreshListener() {
 
             override fun onRefresh(refreshLayout: MaterialRefreshLayout) {
-                toast("shuaxin")
+                var url = "http://gank.io/api/data/Android/10/1"
+                updata(url)
                 refresh.finishRefresh();
+                toast("刷新成功")
             }
 
             override fun onRefreshLoadMore(refreshLayout: MaterialRefreshLayout) {
-                //上拉刷新...
-                number=number+1
-                url = "http://gank.io/api/data/Android/10/$number"
-                toast(url)
+                number = number + 10
+                url = "http://gank.io/api/data/Android/$number/1"
                 updata(url)
-                refresh.finishRefreshLoadMore();
+                refresh.finishRefreshLoadMore()
             }
         })
     }
 
-    fun updata(url:String) {
+    fun updata(url: String) {
         var context: Context = this
         doAsync {
             var returnjsonstr = URL(url).readText()
@@ -67,6 +68,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-package com.nilin.simplenews.model
+package com.nilin.developgoods.model
 
 /**
  * Created by liangd on 2017/6/12.
