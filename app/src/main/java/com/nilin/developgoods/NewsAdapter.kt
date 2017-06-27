@@ -19,7 +19,6 @@ import java.net.URL
  */
 class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
         var view: View
             view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, null, false)
@@ -60,14 +59,4 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
 
     }
 
-
-    class FooterHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
-
 }
-
-
-
-

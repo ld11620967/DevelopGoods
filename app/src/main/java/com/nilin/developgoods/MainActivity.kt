@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import com.cjj.MaterialRefreshLayout
-import com.cjj.MaterialRefreshListener
 import com.google.gson.Gson
 import com.nilin.developgoods.model.ApiGank
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
-import org.jetbrains.anko.uiThread
 import java.net.URL
+import com.jcodecraeer.xrecyclerview.XRecyclerView
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         var number = 10
-        var url = "http://gank.io/api/data/Android/$number/1"
+        var url = "http://gank.io/api/data/Android/10/1"
 
         updata(url)
 
@@ -37,30 +36,29 @@ class MainActivity : AppCompatActivity() {
             toast("已达顶部")
         }
 
-        refresh.setMaterialRefreshListener(object : MaterialRefreshListener() {
-
-            override fun onRefresh(refreshLayout: MaterialRefreshLayout) {
+        recyclerview.setLoadingListener(object : XRecyclerView.LoadingListener {
+            override fun onRefresh() {
                 var url = "http://gank.io/api/data/Android/10/1"
                 updata(url)
-                refresh.finishRefresh();
                 toast("刷新成功")
+                recyclerview.refreshComplete()
             }
 
-            override fun onRefreshLoadMore(refreshLayout: MaterialRefreshLayout) {
-                number = number + 10
+            override fun onLoadMore() {
+                number = number + 5
                 url = "http://gank.io/api/data/Android/$number/1"
                 updata(url)
-                refresh.finishRefreshLoadMore()
+                recyclerview.loadMoreComplete()
             }
         })
     }
 
-    fun updata(url: String) {
+
+fun updata(url: String) {
         var context: Context = this
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            Log.i("haha", "haha" + returnjson.results)
             uiThread {
                 recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.adapter = NewsAdapter(returnjson.results)
@@ -68,14 +66,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
