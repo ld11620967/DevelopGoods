@@ -1,5 +1,6 @@
 package com.nilin.developgoods
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
@@ -12,17 +13,26 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.uiThread
 import java.net.URL
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 
 /**
  * Created by liangd on 2017/6/6.
  */
-class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(var items:List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+
+//    var items:NewsAdapter
+
+    fun NewsAdapter(context: Context, data: List<NewsModel>) {
+        var mContext = context
+        var mData = data
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
-        var view: View
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, null, false)
-            return ViewHolder(view)
+        var view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_news, null, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -41,22 +51,26 @@ class NewsAdapter(val items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
                 }
             }
         }
-
-        holder.itemView.onClick {
-            var position = holder.adapterPosition
-            var context = holder.itemView.context
-            val intent = Intent()
-            intent.setClass(context, DetailsActivity::class.java)
-            intent.putExtra("url", news.url)
-            context.startActivity(intent)
-
-        }
+//
+//        holder.itemView.onClick {
+//            var position = holder.adapterPosition
+//            var context = holder.itemView.context
+//            val intent = Intent()
+//            intent.setClass(context, DetailsActivity::class.java)
+//            intent.putExtra("url", news.url)
+//            context.startActivity(intent)
+//
+//        }
     }
 
-    override fun getItemCount() = items.size
+//    override fun getItemCount() = items.size
+    override fun getItemCount()= 20
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+//        fun ViewHolder(item: View) {
+//            super(itemView)
+        }
 
     }
 
-}
+

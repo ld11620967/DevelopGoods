@@ -4,8 +4,8 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import com.google.gson.Gson
 import com.nilin.developgoods.model.ApiGank
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +18,7 @@ import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity() {
-
+    var context = this
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,8 +28,18 @@ class MainActivity : AppCompatActivity() {
 
         var number = 10
         var url = "http://gank.io/api/data/Android/10/1"
+        doAsync {
+            var returnjsonstr = URL(url).readText()
+            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+            var data=NewsAdapter(returnjson.results)
+            uiThread {
+                //recyclerview.layoutManager = GridLayoutManager(context, 1)
+                recyclerview.setLayoutManager(LinearLayoutManager(context))
 
-        updata(url)
+                recyclerview.setAdapter(data)
+            }
+        }
+//        updata(url)
 
         fab.onClick {
             recyclerview.smoothScrollToPosition(0)
@@ -39,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
                 var url = "http://gank.io/api/data/Android/10/1"
-                updata(url)
+//                updata(url)
                 toast("刷新成功")
                 recyclerview.refreshComplete()
             }
@@ -47,22 +57,25 @@ class MainActivity : AppCompatActivity() {
             override fun onLoadMore() {
                 number = number + 5
                 url = "http://gank.io/api/data/Android/$number/1"
-                updata(url)
+//                updata(url)
+
                 recyclerview.loadMoreComplete()
             }
         })
     }
 
-
-fun updata(url: String) {
-        var context: Context = this
-        doAsync {
-            var returnjsonstr = URL(url).readText()
-            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            uiThread {
-                recyclerview.layoutManager = GridLayoutManager(context, 1)
-                recyclerview.adapter = NewsAdapter(returnjson.results)
-            }
-        }
-    }
+//fun updata(url: String) {
+//        var context: Context = this
+//        doAsync {
+//            var returnjsonstr = URL(url).readText()
+//            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+//            var data=NewsAdapter(returnjson.results)
+////            uiThread {
+////                recyclerview.layoutManager = GridLayoutManager(context, 1)
+//////                recyclerview.adapter = NewsAdapter(returnjson.results)
+////                recyclerview.adapter.notifyDataSetChanged()
+////            }
+//        }
+//    }
 }
+
