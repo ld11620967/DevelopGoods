@@ -1,7 +1,6 @@
 package com.nilin.developgoods
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,20 +9,14 @@ import android.view.ViewGroup
 import com.nilin.developgoods.model.NewsModel
 import kotlinx.android.synthetic.main.item_news.view.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.uiThread
 import java.net.URL
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
 
 
 /**
  * Created by liangd on 2017/6/6.
  */
-class NewsAdapter(var items:List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
-
-//    var items:NewsAdapter
+class NewsAdapter(var items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     fun NewsAdapter(context: Context, data: List<NewsModel>) {
         var mContext = context
@@ -36,6 +29,19 @@ class NewsAdapter(var items:List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+
+//        holder.mTextView.setText(mDataSet.get(position))
+        //判断是否设置了监听器
+        if (mOnItemClickListener != null) {
+            //为ItemView设置监听器
+            holder.itemView.setOnClickListener {
+                val position = holder.layoutPosition // 1
+                mOnItemClickListener!!.onItemClick(holder.itemView, position) // 2
+            }
+        }
+
+
         var news = items.get(position)
         holder.itemView.item_title.text = news.desc
         holder.itemView.item_time.text = news.publishedAt.substring(0, 10)
@@ -51,26 +57,49 @@ class NewsAdapter(var items:List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.
                 }
             }
         }
-//
-//        holder.itemView.onClick {
-//            var position = holder.adapterPosition
-//            var context = holder.itemView.context
-//            val intent = Intent()
-//            intent.setClass(context, DetailsActivity::class.java)
-//            intent.putExtra("url", news.url)
-//            context.startActivity(intent)
-//
-//        }
+
     }
 
-//    override fun getItemCount() = items.size
-    override fun getItemCount()= 20
+    override fun getItemCount() = items.size
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        fun ViewHolder(item: View) {
-//            super(itemView)
-        }
 
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int)
+    }
+
+    private var mOnItemClickListener: OnItemClickListener? = null
+
+
+    fun setOnItemClickListener(mOnItemClickListener: OnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener
+    }
+
+    //新增数据
+    fun addData(position: Int,mData:NewsAdapter) {
+        mDataSet.add(position, "Add One")
+        notifyItemInserted(position)
+    }
+
+    fun updataUI() {
+        var news = items.get(position)
+        holder.itemView.item_title.text = news.desc
+        holder.itemView.item_time.text = news.publishedAt.substring(0, 10)
+        var model: NewsModel = items[position]
+        doAsync {
+            val data = URL(model.images[0] + "?imageView2/0/w/100").readBytes()
+            uiThread {
+                if (data != null) {
+                    val bitma = BitmapFactory.decodeByteArray(data, 0, data.size)
+                    holder.itemView.item_icon.setImageBitmap(bitma)
+                } else {
+                    holder.itemView.item_icon.colorFilter
+                }
+            }
+        }
+    }
+}
 
 

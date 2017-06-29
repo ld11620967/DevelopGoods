@@ -1,11 +1,11 @@
 package com.nilin.developgoods
 
-import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.View
 import com.google.gson.Gson
 import com.nilin.developgoods.model.ApiGank
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +19,7 @@ import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity() {
     var context = this
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,17 +27,29 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        var number = 10
+        var number = 1
         var url = "http://gank.io/api/data/Android/10/1"
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            var data=NewsAdapter(returnjson.results)
+            var mAdapter = NewsAdapter(returnjson.results)
             uiThread {
                 //recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.setLayoutManager(LinearLayoutManager(context))
+                recyclerview.setAdapter(mAdapter)
 
-                recyclerview.setAdapter(data)
+                mAdapter.setOnItemClickListener(object : NewsAdapter.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+
+                        val intent = Intent()
+                        intent.setClass(context, DetailsActivity::class.java)
+                        intent.putExtra("url", returnjson.results.get(position).url)
+                        context.startActivity(intent)
+
+                    }
+                })
+
+
             }
         }
 //        updata(url)
@@ -49,33 +62,52 @@ class MainActivity : AppCompatActivity() {
         recyclerview.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
                 var url = "http://gank.io/api/data/Android/10/1"
-//                updata(url)
+                updata(url)
                 toast("刷新成功")
                 recyclerview.refreshComplete()
             }
 
             override fun onLoadMore() {
-                number = number + 5
-                url = "http://gank.io/api/data/Android/$number/1"
+                number = number + 1
+                url = "http://gank.io/api/data/Android/10/$number"
 //                updata(url)
-
+                doAsync {
+                    var returnjsonstr = URL(url).readText()
+                    var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+                    var mAdapter = NewsAdapter(returnjson.results)
+                    uiThread {
+                        recyclerview.setLayoutManager(LinearLayoutManager(context))
+//                        recyclerview.setAdapter(mAdapter)
+                        mAdapter.addData(number + 10, mAdapter)
+                        mAdapter.notifyDataSetChanged()
+                    }
+                }
                 recyclerview.loadMoreComplete()
             }
         })
     }
 
-//fun updata(url: String) {
-//        var context: Context = this
-//        doAsync {
-//            var returnjsonstr = URL(url).readText()
-//            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-//            var data=NewsAdapter(returnjson.results)
-////            uiThread {
-////                recyclerview.layoutManager = GridLayoutManager(context, 1)
-//////                recyclerview.adapter = NewsAdapter(returnjson.results)
-////                recyclerview.adapter.notifyDataSetChanged()
-////            }
-//        }
-//    }
+    fun updata(url: String) {
+        doAsync {
+            var returnjsonstr = URL(url).readText()
+            var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+            var mAdapter = NewsAdapter(returnjson.results)
+            uiThread {
+                //recyclerview.layoutManager = GridLayoutManager(context, 1)
+                recyclerview.setLayoutManager(LinearLayoutManager(context))
+                recyclerview.setAdapter(mAdapter)
+
+                mAdapter.setOnItemClickListener(object : NewsAdapter.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        val intent = Intent()
+                        intent.setClass(context, DetailsActivity::class.java)
+                        intent.putExtra("url", returnjson.results.get(position).url)
+                        context.startActivity(intent)
+                    }
+                })
+
+            }
+        }
+    }
 }
 
