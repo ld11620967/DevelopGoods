@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import com.google.gson.Gson
 import com.nilin.developgoods.model.ApiGank
@@ -13,12 +14,16 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.toast
 import java.net.URL
 import com.jcodecraeer.xrecyclerview.XRecyclerView
+import com.nilin.developgoods.model.NewsModel
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
 
 class MainActivity : AppCompatActivity() {
     var context = this
+//    var mList: List<NewsModel> = ArrayList<NewsModel>()
+    var mdata:List<String> = ArrayList<String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            var mAdapter = NewsAdapter(returnjson.results)
+            var mAdapter = NewsAdapter(context,returnjson.results)
             uiThread {
                 //recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.setLayoutManager(LinearLayoutManager(context))
@@ -40,16 +45,12 @@ class MainActivity : AppCompatActivity() {
 
                 mAdapter.setOnItemClickListener(object : NewsAdapter.OnItemClickListener {
                     override fun onItemClick(view: View, position: Int) {
-
                         val intent = Intent()
                         intent.setClass(context, DetailsActivity::class.java)
                         intent.putExtra("url", returnjson.results.get(position).url)
                         context.startActivity(intent)
-
                     }
                 })
-
-
             }
         }
 //        updata(url)
@@ -74,12 +75,12 @@ class MainActivity : AppCompatActivity() {
                 doAsync {
                     var returnjsonstr = URL(url).readText()
                     var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-                    var mAdapter = NewsAdapter(returnjson.results)
+                    var mAdapter = NewsAdapter(context,returnjson.results)
                     uiThread {
                         recyclerview.setLayoutManager(LinearLayoutManager(context))
-//                        recyclerview.setAdapter(mAdapter)
-                        mAdapter.addData(number + 10, mAdapter)
-                        mAdapter.notifyDataSetChanged()
+                        recyclerview.setAdapter(mAdapter)
+//                        mAdapter.addData(number + 10, returnjson.results)
+//                        mAdapter.notifyDataSetChanged()
                     }
                 }
                 recyclerview.loadMoreComplete()
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            var mAdapter = NewsAdapter(returnjson.results)
+            var mAdapter = NewsAdapter(context,returnjson.results)
             uiThread {
                 //recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.setLayoutManager(LinearLayoutManager(context))

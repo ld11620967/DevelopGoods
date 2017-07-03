@@ -16,7 +16,7 @@ import java.net.URL
 /**
  * Created by liangd on 2017/6/6.
  */
-class NewsAdapter(var items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(context: Context,var items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     fun NewsAdapter(context: Context, data: List<NewsModel>) {
         var mContext = context
@@ -30,8 +30,6 @@ class NewsAdapter(var items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-
-//        holder.mTextView.setText(mDataSet.get(position))
         //判断是否设置了监听器
         if (mOnItemClickListener != null) {
             //为ItemView设置监听器
@@ -78,28 +76,14 @@ class NewsAdapter(var items: List<NewsModel>) : RecyclerView.Adapter<NewsAdapter
     }
 
     //新增数据
-    fun addData(position: Int,mData:NewsAdapter) {
-        mDataSet.add(position, "Add One")
+    fun addData(position: Int,items: List<NewsModel>) {
+        var mposition = position
+        var mitems = items
+
+
         notifyItemInserted(position)
     }
 
-    fun updataUI() {
-        var news = items.get(position)
-        holder.itemView.item_title.text = news.desc
-        holder.itemView.item_time.text = news.publishedAt.substring(0, 10)
-        var model: NewsModel = items[position]
-        doAsync {
-            val data = URL(model.images[0] + "?imageView2/0/w/100").readBytes()
-            uiThread {
-                if (data != null) {
-                    val bitma = BitmapFactory.decodeByteArray(data, 0, data.size)
-                    holder.itemView.item_icon.setImageBitmap(bitma)
-                } else {
-                    holder.itemView.item_icon.colorFilter
-                }
-            }
-        }
-    }
 }
 
 
