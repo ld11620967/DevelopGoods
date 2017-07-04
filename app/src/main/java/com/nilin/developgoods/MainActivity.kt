@@ -17,13 +17,14 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView
 import com.nilin.developgoods.model.NewsModel
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     var context = this
-//    var mList: List<NewsModel> = ArrayList<NewsModel>()
-    var mdata:List<String> = ArrayList<String>()
-
+    private var mList = ArrayList<NewsModel>()
+    //    lateinit var mAdapter:NewsAdapter
+    var mAdapter = NewsAdapter(mList)
+    var number = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +33,15 @@ class MainActivity : AppCompatActivity() {
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        var number = 1
+
         var url = "http://gank.io/api/data/Android/10/1"
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            var mAdapter = NewsAdapter(context,returnjson.results)
+
+            mList.addAll(returnjson.results)
+
+            var mAdapter = NewsAdapter(mList)
             uiThread {
                 //recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.setLayoutManager(LinearLayoutManager(context))
@@ -62,27 +66,48 @@ class MainActivity : AppCompatActivity() {
 
         recyclerview.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
+//                mList.clear()
                 var url = "http://gank.io/api/data/Android/10/1"
+
                 updata(url)
                 toast("刷新成功")
                 recyclerview.refreshComplete()
             }
 
             override fun onLoadMore() {
-                number = number + 1
-                url = "http://gank.io/api/data/Android/10/$number"
-//                updata(url)
+                number = number + 10
+                url = "http://gank.io/api/data/Android/$number/1"
+
+
+
                 doAsync {
                     var returnjsonstr = URL(url).readText()
+
                     var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-                    var mAdapter = NewsAdapter(context,returnjson.results)
+
+
+                    mList.addAll(returnjson.results)
+
                     uiThread {
-                        recyclerview.setLayoutManager(LinearLayoutManager(context))
-                        recyclerview.setAdapter(mAdapter)
-//                        mAdapter.addData(number + 10, returnjson.results)
-//                        mAdapter.notifyDataSetChanged()
+                        mAdapter.notifyDataSetChanged()
                     }
                 }
+
+//                doAsync {
+//                    var returnjsonstr = URL(url).readText()
+//                    var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
+//                    mList.addAll(returnjson.results)
+//
+//                    mAdapter.notifyDataSetChanged()
+//
+//
+//                    uiThread {
+////                        recyclerview.setLayoutManager(LinearLayoutManager(context))
+//
+////                        recyclerview.setAdapter(mAdapter)
+////
+//                    }
+//                }
                 recyclerview.loadMoreComplete()
             }
         })
@@ -92,7 +117,11 @@ class MainActivity : AppCompatActivity() {
         doAsync {
             var returnjsonstr = URL(url).readText()
             var returnjson = Gson().fromJson(returnjsonstr, ApiGank::class.java)
-            var mAdapter = NewsAdapter(context,returnjson.results)
+//            var mAdapter = NewsAdapter(context,returnjson.results)
+            mList.addAll(returnjson.results)
+            var mAdapter = NewsAdapter(mList)
+//            val list = ArrayList(asList(returnjson.results))
+//            var mAdapter = NewsAdapter(context,list)
             uiThread {
                 //recyclerview.layoutManager = GridLayoutManager(context, 1)
                 recyclerview.setLayoutManager(LinearLayoutManager(context))
