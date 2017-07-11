@@ -17,7 +17,13 @@
             app:layout_scrollFlags="scroll|enterAlways|snap" />
     </android.support.design.widget.AppBarLayout>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <!--<com.jcodecraeer.xrecyclerview.XRecyclerView-->
+        <!--android:id="@+id/recyclerview"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />    -->
+
+    <RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
