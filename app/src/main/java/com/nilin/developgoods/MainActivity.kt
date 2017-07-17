@@ -7,14 +7,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.kcode.gankotlin.repository.Article
+import com.nilin.developgoods.model.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import com.nilin.retrofit2_rxjava2_demo.Api
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
     var adapter: ArticleAdapter? = null
+    val pageSize = 10
+    var pageNumber = 1
+    var isRefresh = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,25 +33,23 @@ class MainActivity : AppCompatActivity() {
         adapter = ArticleAdapter(this,R.layout.item_news)
         recyclerview.adapter = adapter
 
+        adapter!!.setOnLoadMoreListener({ loadMore() }, recyclerview)
         adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
             adapter, view, position ->
             start2Detail(adapter.data[position] as Article)
         }
 
-        loadPublishedDate()
-    }
+        fab.onClick {
+            recyclerview.smoothScrollToPosition(0)
+        }
 
-    fun loadPublishedDate() {
+        swipeLayout.setOnRefreshListener({
+            pageNumber = 1
+            isRefresh = true
+            loadData(pageSize,pageNumber)
+        })
 
-        val api = Api.Factory.create()
-        api.getData("Android", 10, 1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                    adapter!!.addData(result.results)
-
-                }, {}, { })
+        loadData(pageSize,pageNumber)
     }
 
     fun start2Detail(article: Article) {
@@ -53,5 +57,57 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("url", article.url)
         startActivity(intent)
     }
+
+    private fun loadMore() {
+        pageNumber++
+        loadData(pageSize, pageNumber)
+    }
+
+    protected fun loadData(pageSize: Int, pageNumber: Int) {
+        val api = Api.Factory.create()
+        api.getData("Android",pageSize, pageNumber)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    result ->
+                    parseResult(result)
+                }, {
+                    _ ->
+                    loadError()
+                    loadFinish()
+                })
+    }
+    fun parseResult(result: Result) {
+        if (result.error) {
+            loadError()
+        }else{
+            loadSuccess(result.results)
+        }
+        loadFinish()
+    }
+
+    fun loadError() {
+            toast("读取失败！")
+    }
+
+    fun loadSuccess(data: List<Article>) {
+        setUp(data)
+    }
+
+    private fun setUp(data: List<Article>) {
+        if (isRefresh) {
+            adapter!!.setNewData(data)
+        } else {
+            adapter!!.addData(data)
+        }
+    }
+
+    fun loadFinish() {
+        if (swipeLayout!!.isRefreshing) {
+            swipeLayout!!.isRefreshing = false
+        }
+        adapter!!.loadMoreComplete()
+    }
+
 }
 
