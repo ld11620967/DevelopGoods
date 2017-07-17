@@ -1,7 +1,6 @@
 package com.nilin.retrofit2_rxjava2_demo
 
-import com.nilin.developgoods.model.ApiGank
-import com.nilin.developgoods.model.NewsModel
+import com.nilin.developgoods.model.Result
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,7 +19,7 @@ interface Api {
     @GET("api/data/{type}/{pageSize}/{pageNumber}")
     fun getData(@Path("type") type: String,
                 @Path("pageSize") pageSize: Int,
-                @Path("pageNumber") pageNumber: Int): Observable<ApiGank>
+                @Path("pageNumber") pageNumber: Int): Observable<Result>
 
 
 
