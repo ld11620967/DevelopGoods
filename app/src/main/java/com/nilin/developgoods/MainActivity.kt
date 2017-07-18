@@ -71,12 +71,9 @@ class MainActivity : AppCompatActivity() {
                 .subscribe({
                     result ->
                     parseResult(result)
-                }, {
-                    _ ->
-                    loadError()
-                    loadFinish()
-                })
+                }, {})
     }
+
     fun parseResult(result: Result) {
         if (result.error) {
             loadError()
@@ -97,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     private fun setUp(data: List<Article>) {
         if (isRefresh) {
             adapter!!.setNewData(data)
+            isRefresh = false
         } else {
             adapter!!.addData(data)
         }
