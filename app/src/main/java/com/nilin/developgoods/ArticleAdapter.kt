@@ -17,16 +17,16 @@ class ArticleAdapter(var context: Context, layoutId:Int) : BaseQuickAdapter<Arti
 
     override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
         viewHolder!!.setText(R.id.title,article!!.desc)
-        viewHolder.setText(R.id.publishedAt, DateUtils.getRelativeTimeSpanString(sdf.parse(article!!.publishedAt).time))
+        viewHolder.setText(R.id.publishedAt, DateUtils.getRelativeTimeSpanString(sdf.parse(article.publishedAt).time))
 
         val image: ImageView = viewHolder.getView(R.id.image)
 
-        if (article!!.images == null || article!!.images.size == 0) {
+        if (article.images == null) {
             image.visibility = View.GONE
         }else{
             image.visibility = View.VISIBLE
             val width:Int = context.resources.getDimension(R.dimen.article_image_width).toInt()
-            Glide.with(context).load("${article!!.images[0]}?imageView2/0/w/$width").into(image)
+            Glide.with(context).load("${article.images[0]}?imageView2/0/w/$width").into(image)
         }
 
     }

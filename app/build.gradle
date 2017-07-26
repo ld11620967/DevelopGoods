@@ -36,7 +36,6 @@ dependencies {
     compile "org.jetbrains.anko:anko:$anko_version"
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.github.githubwing:ByeBurger:1.2.3'
-    compile 'com.jcodecraeer:xrecyclerview:1.3.2'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
