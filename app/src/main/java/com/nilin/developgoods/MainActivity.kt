@@ -1,6 +1,7 @@
 package com.nilin.developgoods
 
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -30,13 +31,20 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         recyclerview.layoutManager = LinearLayoutManager(this)
-        adapter = ArticleAdapter(this,R.layout.item_news)
+        adapter = ArticleAdapter(this, R.layout.item_news)
         recyclerview.adapter = adapter
 
         adapter!!.setOnLoadMoreListener({ loadMore() }, recyclerview)
         adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
-            adapter, view, position ->
+            adapter, _, position ->
             start2Detail(adapter.data[position] as Article)
+        }
+
+        adapter!!.onItemLongClickListener= BaseQuickAdapter.OnItemLongClickListener listener@{
+            adapter, _, position ->
+            start2Browser(adapter.data[position] as Article)
+            return@listener true
+//            return@OnItemLongClickListener true
         }
 
         fab.onClick {
@@ -46,16 +54,23 @@ class MainActivity : AppCompatActivity() {
         swipeLayout.setOnRefreshListener({
             pageNumber = 1
             isRefresh = true
-            loadData(pageSize,pageNumber)
+            loadData(pageSize, pageNumber)
         })
 
-        loadData(pageSize,pageNumber)
+        loadData(pageSize, pageNumber)
     }
 
     fun start2Detail(article: Article) {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra("url", article.url)
         startActivity(intent)
+
+    }
+
+    fun start2Browser(article: Article) {
+        val uri = Uri.parse(article.url)
+        val it = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(it)
     }
 
     private fun loadMore() {
@@ -65,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     protected fun loadData(pageSize: Int, pageNumber: Int) {
         val api = Api.Factory.create()
-        api.getData("Android",pageSize, pageNumber)
+        api.getData("Android", pageSize, pageNumber)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -77,14 +92,14 @@ class MainActivity : AppCompatActivity() {
     fun parseResult(result: Result) {
         if (result.error) {
             loadError()
-        }else{
+        } else {
             loadSuccess(result.results)
         }
         loadFinish()
     }
 
     fun loadError() {
-            toast("读取失败！")
+        toast("读取失败！")
     }
 
     fun loadSuccess(data: List<Article>) {
@@ -108,4 +123,3 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
-

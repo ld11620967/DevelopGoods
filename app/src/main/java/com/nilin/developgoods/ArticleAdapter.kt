@@ -16,7 +16,12 @@ class ArticleAdapter(var context: Context, layoutId:Int) : BaseQuickAdapter<Arti
     val sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
     override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
-        viewHolder!!.setText(R.id.title,article!!.desc)
+        if (article!!.desc.length > 60) {
+            viewHolder!!.setText(R.id.title, article!!.desc.substring(0, 59))
+        } else {
+            viewHolder!!.setText(R.id.title,article!!.desc)
+        }
+
         viewHolder.setText(R.id.publishedAt, DateUtils.getRelativeTimeSpanString(sdf.parse(article.publishedAt).time))
 
         val image: ImageView = viewHolder.getView(R.id.image)
