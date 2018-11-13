@@ -1,4 +1,4 @@
-package com.kcode.gankotlin.repository
+package com.nilin.developgoods.model
 
 /**
  * Created by caik on 2017/6/1.

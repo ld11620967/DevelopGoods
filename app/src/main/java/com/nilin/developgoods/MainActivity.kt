@@ -1,5 +1,6 @@
 package com.nilin.developgoods
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -7,7 +8,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.kcode.gankotlin.repository.Article
+import com.nilin.developgoods.model.Article
 import com.nilin.developgoods.model.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import com.nilin.retrofit2_rxjava2_demo.Api
@@ -78,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         loadData(pageSize, pageNumber)
     }
 
+    @SuppressLint("CheckResult")
     protected fun loadData(pageSize: Int, pageNumber: Int) {
         val api = Api.Factory.create()
         api.getData("Android", pageSize, pageNumber)

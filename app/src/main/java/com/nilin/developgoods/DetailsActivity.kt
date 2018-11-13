@@ -1,5 +1,6 @@
 package com.nilin.developgoods
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -17,8 +18,8 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        var intent:Intent= getIntent()
-        var url:String=intent.getStringExtra("url")
+        val intent:Intent= getIntent()
+        val url:String=intent.getStringExtra("url")
 
         webview.settings.javaScriptEnabled
         webview.run {
@@ -27,10 +28,11 @@ class DetailsActivity : AppCompatActivity() {
 
             setOnTouchListener(object : View.OnTouchListener {
 
+                @SuppressLint("ClickableViewAccessibility")
                 override fun onTouch(v: View, event: MotionEvent): Boolean {
 
                     when (event.action) {
-                    MotionEvent.ACTION_DOWN -> startPoint!!.set(event.x, event.y)
+                    MotionEvent.ACTION_DOWN -> startPoint.set(event.x, event.y)
                     MotionEvent.ACTION_UP -> if (Math.abs(startPoint.x - event.x) >= 200 && Math.abs(startPoint.y - event.y) <= 50)
                         finish()
                     }
