@@ -2,7 +2,6 @@ package com.nilin.developgoods
 
 import android.content.Context
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -13,16 +12,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ArticleAdapter(var context: Context, layoutId:Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
-
+class ArticleAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
 
     val sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
-    override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
-        if (article!!.desc.length > 60) {
-            viewHolder!!.setText(R.id.title, article.desc.substring(0, 59))
+    override fun convert(viewHolder: BaseViewHolder, article: Article) {
+        if (article.desc.length > 50) {
+            viewHolder.setText(R.id.title, article.desc.substring(0, 49) + "...")
         } else {
-            viewHolder!!.setText(R.id.title,article.desc)
+            viewHolder.setText(R.id.title, article.desc)
         }
 
         viewHolder.setText(R.id.publishedAt, DateUtils.getRelativeTimeSpanString(sdf.parse(article.publishedAt).time))
@@ -31,13 +29,11 @@ class ArticleAdapter(var context: Context, layoutId:Int) : BaseQuickAdapter<Arti
 
         if (article.images == null) {
             image.visibility = View.GONE
-        }else{
-            image.visibility = View.VISIBLE
-            val width:Int = context.resources.getDimension(R.dimen.article_image_width).toInt()
-//            Glide.with(context).load("${article.images[0]}?imageView2/0/w/$width").into(image)
+        } else if (article.images.size == 0) {
+            Glide.with(context).load(R.mipmap.icon).into(image)
+        } else {
             Glide.with(context).load(article.images[0]).into(image)
         }
-
     }
 }
 

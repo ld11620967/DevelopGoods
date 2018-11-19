@@ -21,8 +21,6 @@ interface Api {
                 @Path("pageSize") pageSize: Int,
                 @Path("pageNumber") pageNumber: Int): Observable<Result>
 
-
-
     companion object Factory{
         fun create():Api {
 

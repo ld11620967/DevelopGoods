@@ -20,7 +20,7 @@ import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
     var adapter: ArticleAdapter? = null
-    val pageSize = 10
+    val pageSize = 20
     var pageNumber = 1
     var isRefresh = false
 
