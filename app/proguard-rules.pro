@@ -14,16 +14,12 @@
 # 将下面替换成自己的实体类
 -keep class com.example.bean.** { *; }
 
-
 -dontwarn okio.**
 -dontwarn javax.annotation.Nullable
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 
-
-
 -dontwarn com.github.**
 -keep class com.github.** { *;}
-
 
 # OkHttp3
 -dontwarn com.squareup.okhttp3.**

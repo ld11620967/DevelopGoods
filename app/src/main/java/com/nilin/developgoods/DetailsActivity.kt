@@ -2,7 +2,7 @@ package com.nilin.developgoods
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.activity_details.*
@@ -19,15 +19,13 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_details)
 
         val intent:Intent= getIntent()
-        val url:String=intent.getStringExtra("url")
+        val url:String=intent.getStringExtra("url")!!
 
         webview.settings.javaScriptEnabled
         webview.run {
             setWebViewClient(WebViewClient())
             loadUrl(url)
-
             setOnTouchListener(object : View.OnTouchListener {
-
                 @SuppressLint("ClickableViewAccessibility")
                 override fun onTouch(v: View, event: MotionEvent): Boolean {
 

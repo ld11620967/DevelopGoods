@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class ArticleAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
 
     val sdf: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
@@ -27,10 +28,8 @@ class ArticleAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Art
 
         val image: ImageView = viewHolder.getView(R.id.image)
 
-        if (article.images == null) {
+        if (article.images.isNullOrEmpty()) {
             image.visibility = View.GONE
-        } else if (article.images.size == 0) {
-            Glide.with(context).load(R.mipmap.icon).into(image)
         } else {
             Glide.with(context).load(article.images[0]).into(image)
         }

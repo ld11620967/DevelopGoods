@@ -3,29 +3,37 @@ package com.nilin.developgoods
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.Toolbar
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.nilin.developgoods.model.Article
 import com.nilin.developgoods.model.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import com.nilin.retrofit2_rxjava2_demo.Api
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import kotlinx.coroutines.*
+import org.jetbrains.anko.sdk27.coroutines.onClick
+
 import org.jetbrains.anko.toast
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.coroutines.CoroutineContext
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
     var adapter: ArticleAdapter? = null
     val pageSize = 20
     var pageNumber = 1
     var isRefresh = false
 
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        job = Job()
         setContentView(R.layout.activity_main)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
@@ -36,16 +44,13 @@ class MainActivity : AppCompatActivity() {
         recyclerview.adapter = adapter
 
         adapter!!.setOnLoadMoreListener({ loadMore() }, recyclerview)
-        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
-            adapter, _, position ->
+        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, _, position ->
             start2Detail(adapter.data[position] as Article)
         }
 
-        adapter!!.onItemLongClickListener= BaseQuickAdapter.OnItemLongClickListener listener@{
-            adapter, _, position ->
+        adapter!!.onItemLongClickListener = BaseQuickAdapter.OnItemLongClickListener listener@{ adapter, _, position ->
             start2Browser(adapter.data[position] as Article)
             return@listener true
-//            return@OnItemLongClickListener true
         }
 
         fab.onClick {
@@ -65,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra("url", article.url)
         startActivity(intent)
-
     }
 
     fun start2Browser(article: Article) {
@@ -79,16 +83,22 @@ class MainActivity : AppCompatActivity() {
         loadData(pageSize, pageNumber)
     }
 
+    val retrofit = Retrofit.Builder()
+            .baseUrl("http://gank.io/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(Api::class.java)
+
     @SuppressLint("CheckResult")
     protected fun loadData(pageSize: Int, pageNumber: Int) {
-        val api = Api.Factory.create()
-        api.getData("Android", pageSize, pageNumber)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                    parseResult(result)
-                }, {})
+        launch {
+            val result = withContext(Dispatchers.IO) {
+                retrofit.getData("Android", pageSize, pageNumber).execute()
+            }
+            if (result.isSuccessful) {
+                parseResult(result.body()!!)
+            }
+        }
     }
 
     fun parseResult(result: Result) {
