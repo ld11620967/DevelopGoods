@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/DevelopGoods.iml" filepath="$PROJECT_DIR$/DevelopGoods.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/DevelopGoods-app.iml" filepath="$PROJECT_DIR$/app/DevelopGoods-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/workspace-DevelopGoods.iml" filepath="$PROJECT_DIR$/.idea/modules/workspace-DevelopGoods.iml" group="DevelopGoods" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/workspace-DevelopGoods-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/workspace-DevelopGoods-app.iml" group="DevelopGoods/app" />
     </modules>
   </component>
 </project>

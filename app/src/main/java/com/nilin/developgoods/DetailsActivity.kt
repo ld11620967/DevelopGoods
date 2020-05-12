@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.graphics.PointF
 
+
 class DetailsActivity : AppCompatActivity() {
 
     private val startPoint = PointF()

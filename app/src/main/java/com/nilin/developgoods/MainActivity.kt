@@ -23,7 +23,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
     var adapter: ArticleAdapter? = null
-    val pageSize = 20
+    val pageSize = 30
     var pageNumber = 1
     var isRefresh = false
 

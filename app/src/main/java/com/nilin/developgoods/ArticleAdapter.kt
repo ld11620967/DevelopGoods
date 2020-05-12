@@ -35,5 +35,3 @@ class ArticleAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Art
         }
     }
 }
-
-
